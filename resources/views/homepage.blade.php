@@ -521,39 +521,55 @@
                 <!-- Contact Form -->
                 <div
                     class="lg:col-span-2 bg-white dark:bg-brand-cardDark p-8 rounded-2xl border border-cream-200 dark:border-brand-borderDark shadow-sm">
-                    <form onsubmit="event.preventDefault(); alert('Message sent successfully!');" class="space-y-4">
+                    <form action="{{ route('contact') }}" method="POST" class="space-y-4">
+                        @csrf
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs font-bold text-zinc-700 dark:text-zinc-300 mb-2">Your
                                     Name</label>
-                                <input type="text" placeholder="John Doe" required
+                                <input type="text" placeholder="John Doe" required name="name" value="{{ old('name') }}"
                                     class="w-full bg-cream-50 dark:bg-zinc-900 border border-cream-200 dark:border-brand-borderDark rounded-xl p-3 text-xs outline-none focus:border-brand-yellow font-sans">
+                                @error('name')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-zinc-700 dark:text-zinc-300 mb-2">Email
                                     Address</label>
-                                <input type="email" placeholder="example@mail.com" required
+                                <input type="email" placeholder="example@mail.com" required name="email" value="{{ old('email') }}"
                                     class="w-full bg-cream-50 dark:bg-zinc-900 border border-cream-200 dark:border-brand-borderDark rounded-xl p-3 text-xs outline-none focus:border-brand-yellow font-sans">
+                                @error('email')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold text-zinc-700 dark:text-zinc-300 mb-2">Subject</label>
-                            <input type="text" placeholder="Custom Order Inquiry"
+                            <input type="text" placeholder="Custom Order Inquiry" name="subject" value="{{ old('subject') }}"
                                 class="w-full bg-cream-50 dark:bg-zinc-900 border border-cream-200 dark:border-brand-borderDark rounded-xl p-3 text-xs outline-none focus:border-brand-yellow font-sans">
+                            @error('subject')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold text-zinc-700 dark:text-zinc-300 mb-2">Your
                                 Message</label>
-                            <textarea rows="4" placeholder="Write your message here..." required
-                                class="w-full bg-cream-50 dark:bg-zinc-900 border border-cream-200 dark:border-brand-borderDark rounded-xl p-3 text-xs outline-none focus:border-brand-yellow font-sans"></textarea>
+                            <textarea rows="4" placeholder="Write your message here..." required name="message"
+                                class="w-full bg-cream-50 dark:bg-zinc-900 border border-cream-200 dark:border-brand-borderDark rounded-xl p-3 text-xs outline-none focus:border-brand-yellow font-sans">{{ old('message') }}</textarea>
+                            @error('message')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <button type="submit"
                             class="w-full sm:w-auto px-8 py-3 bg-brand-yellow hover:bg-brand-hover text-zinc-900 font-bold rounded-xl text-xs transition-colors">
                             Send Message <i class="fa-solid fa-paper-plane ml-2"></i>
                         </button>
+                        @if(session('success'))
+                            <p class="text-green-500 text-xs mt-2">{{ session('success') }}</p>
+                        @endif
                     </form>
                 </div>
             </div>
