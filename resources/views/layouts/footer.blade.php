@@ -42,10 +42,8 @@
                 <div>
                     <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-white mb-4">Secured Payments</h4>
                     <p class="text-xs mb-3">We accept all major national cards & mobile wallets.</p>
-                    <div class="flex gap-2 items-center text-xs font-bold text-zinc-800 dark:text-zinc-200">
-                        <span class="px-2 py-1 bg-white dark:bg-zinc-800 rounded border border-cream-200 dark:border-zinc-700">VISA</span>
-                        <span class="px-2 py-1 bg-white dark:bg-zinc-800 rounded border border-cream-200 dark:border-zinc-700">bKash</span>
-                        <span class="px-2 py-1 bg-white dark:bg-zinc-800 rounded border border-cream-200 dark:border-zinc-700">Nagad</span>
+                    <div class="flex items-center gap-2">
+                        <img src="{{ asset('assets/img/payment-method.png') }}" alt="Payment Methods" class="h-8" />    
                     </div>
                 </div>
             </div>
