@@ -120,4 +120,3 @@ class FaqController extends Controller
         return redirect()->route('admin.faqs.index')->with('success', 'FAQ status updated successfully!');
     }
 }
-

@@ -3,7 +3,11 @@
             <div class="flex items-center justify-between h-20">
                 <!-- Logo -->
                 <a href="{{ route('home') }}" class="flex-shrink-0 flex items-center gap-2">
-                    <img src="{{ asset('assets/img/digigo-logo.png') }}" alt="DigiGo Logo" class=" h-10" />
+                    @if(\App\Models\Setting::get('site_logo'))
+                        <img src="{{ asset(\App\Models\Setting::get('site_logo')) }}" alt="DigiGo Logo" class="h-10 w-auto" />
+                    @else
+                        <img src="{{ asset('assets/img/digigo-logo.png') }}" alt="DigiGo Logo" class="h-10 w-auto" />
+                    @endif
                 </a>
 
                 <!-- Desktop Navigation Links -->
@@ -17,6 +21,11 @@
 
                 <!-- Actions -->
                 <div class="flex items-center gap-3">
+                    <!-- Search Button -->
+                    <a href="{{ route('search') }}" class="p-2.5 rounded-full bg-cream-100 dark:bg-brand-cardDark text-zinc-700 dark:text-zinc-200 hover:bg-cream-200 dark:hover:bg-zinc-800 hover:text-amber-600 dark:hover:text-brand-yellow transition-colors" title="Search Digital Products">
+                        <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                    </a>
+
                     <!-- Dark/Light Mode Toggle -->
                     <button id="themeToggle" class="p-2.5 rounded-full bg-cream-100 dark:bg-brand-cardDark text-zinc-700 dark:text-zinc-200 hover:bg-cream-200 dark:hover:bg-zinc-800 transition-colors">
                         <i class="fa-solid fa-moon dark:hidden"></i>

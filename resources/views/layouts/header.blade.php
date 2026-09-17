@@ -4,10 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title','DigiGo - Modern Digital Shop')</title>
+    <title>@yield('title', \App\Models\Setting::get('meta_title', 'DigiGo - Modern Digital Shop'))</title>
     
-    {{-- Favicon --}}
-    <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon.png') }}">
+    <!-- Dynamic Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ \App\Models\Setting::get('site_favicon') ? asset(\App\Models\Setting::get('site_favicon')) : asset('assets/img/favicon.png') }}">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="@yield('meta_description', \App\Models\Setting::get('meta_description', 'DigiGo provides exclusive official digital products subscription with seamless experience.'))">
+    <meta name="keywords" content="@yield('meta_keywords', \App\Models\Setting::get('meta_keywords', 'digital subscriptions, ott accounts, software license, cloud services, bKash digital shop'))">
+    <meta name="author" content="{{ \App\Models\Setting::get('meta_author', 'DigiGo Bangladesh') }}">
+
+    <!-- OpenGraph & Social Media Meta Tags -->
+    <meta property="og:title" content="@yield('title', \App\Models\Setting::get('meta_title', 'DigiGo - Modern Digital Shop'))">
+    <meta property="og:description" content="@yield('meta_description', \App\Models\Setting::get('meta_description', 'DigiGo provides exclusive official digital products subscription with seamless experience.'))">
+    <meta property="og:image" content="{{ \App\Models\Setting::get('meta_og_image') ? asset(\App\Models\Setting::get('meta_og_image')) : (\App\Models\Setting::get('site_logo') ? asset(\App\Models\Setting::get('site_logo')) : asset('assets/img/digigo-logo.png')) }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="@yield('title', \App\Models\Setting::get('meta_title', 'DigiGo - Modern Digital Shop'))">
+    <meta name="twitter:description" content="@yield('meta_description', \App\Models\Setting::get('meta_description', 'DigiGo provides exclusive official digital products subscription with seamless experience.'))">
+    <meta name="twitter:image" content="{{ \App\Models\Setting::get('meta_og_image') ? asset(\App\Models\Setting::get('meta_og_image')) : (\App\Models\Setting::get('site_logo') ? asset(\App\Models\Setting::get('site_logo')) : asset('assets/img/digigo-logo.png')) }}">
 
     <!-- Google Font: Roboto -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

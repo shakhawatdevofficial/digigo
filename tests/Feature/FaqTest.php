@@ -172,4 +172,3 @@ test('homepage hides FAQ section when status is turned off', function () {
     $response->assertDontSee('id="faq"', false);
     $response->assertDontSee('Test FAQ Question', false);
 });
-

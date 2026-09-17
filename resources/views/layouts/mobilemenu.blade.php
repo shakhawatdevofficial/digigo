@@ -3,17 +3,34 @@
         <div>
             <div class="flex items-center justify-between pb-6 border-b border-cream-200 dark:border-brand-borderDark">
                 <a href="{{ route('home') }}" class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-lg bg-zinc-900 dark:bg-brand-yellow flex items-center justify-center font-bold text-brand-yellow dark:text-zinc-900 text-sm">
-                        D
-                    </div>
-                    <span class="font-extrabold text-xl tracking-tight text-zinc-900 dark:text-white">DIGIGO<span class="text-brand-yellow">.</span></span>
+                    @if(\App\Models\Setting::get('site_logo'))
+                        <img src="{{ asset(\App\Models\Setting::get('site_logo')) }}" alt="Logo" class="h-8 w-auto object-contain" />
+                    @else
+                        <div class="w-8 h-8 rounded-lg bg-zinc-900 dark:bg-brand-yellow flex items-center justify-center font-bold text-brand-yellow dark:text-zinc-900 text-sm">
+                            D
+                        </div>
+                        <span class="font-extrabold text-xl tracking-tight text-zinc-900 dark:text-white">DIGIGO<span class="text-brand-yellow">.</span></span>
+                    @endif
                 </a>
                 <button id="closeDrawerBtn" class="p-2 text-zinc-500 hover:text-zinc-900 dark:hover:text-white text-lg">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
-            <div class="mt-6 flex flex-col space-y-4 font-medium text-base">
+            <!-- Search Form in Mobile Menu -->
+            <form action="{{ route('search') }}" method="GET" class="mt-4">
+                <div class="relative flex items-center">
+                    <input 
+                        type="text" 
+                        name="q" 
+                        placeholder="Search digital products..." 
+                        class="w-full bg-cream-100 dark:bg-zinc-900 border border-cream-200 dark:border-brand-borderDark rounded-xl pl-9 pr-3 py-2 text-xs text-zinc-900 dark:text-zinc-100 outline-none focus:border-brand-yellow font-sans"
+                    >
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 text-zinc-400 text-xs"></i>
+                </div>
+            </form>
+
+            <div class="mt-4 flex flex-col space-y-3 font-medium text-base">
                 <a href="{{ route('home') }}#home" class="mobile-drawer-link py-2 border-b border-cream-100 dark:border-zinc-800 hover:text-brand-yellow transition-colors">Home</a>
                 <a href="{{ route('home') }}#products" class="mobile-drawer-link py-2 border-b border-cream-100 dark:border-zinc-800 hover:text-brand-yellow transition-colors">Digital Shop</a>
                 <a href="{{ route('home') }}#testimonials" class="mobile-drawer-link py-2 border-b border-cream-100 dark:border-zinc-800 hover:text-brand-yellow transition-colors">Reviews</a>

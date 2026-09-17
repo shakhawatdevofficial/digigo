@@ -23,24 +23,106 @@
                 </p>
             @endif
 
-            <div class="mt-10 max-w-xl mx-auto" data-aos="fade-up">
-                <div
-                    class="flex items-center bg-white dark:bg-brand-cardDark p-2 rounded-full shadow-lg border border-cream-200 dark:border-brand-borderDark">
-                    <i class="fa-solid fa-magnifying-glass text-zinc-400 ml-4 mr-2"></i>
-                    <input type="text" placeholder="{{ \App\Models\Setting::get('banner_search_placeholder', 'Search Office 365, YouTube, Spotify...') }}"
-                        class="w-full bg-transparent border-none outline-none text-sm text-zinc-800 dark:text-zinc-200 placeholder-zinc-400 font-sans">
-                    <button
-                        class="bg-brand-yellow hover:bg-brand-hover text-zinc-900 px-6 py-2.5 rounded-full font-semibold text-sm transition-all flex items-center gap-2 shrink-0">
-                        Search <i class="fa-solid fa-arrow-right text-xs"></i>
-                    </button>
+            <div class="mt-10 max-w-xl mx-auto relative text-left" data-aos="fade-up">
+                <form action="{{ route('search') }}" method="GET" id="bannerSearchForm" class="relative">
+                    <div
+                        class="flex items-center bg-white dark:bg-brand-cardDark p-2 rounded-full shadow-lg border border-cream-200 dark:border-brand-borderDark focus-within:border-brand-yellow transition-all">
+                        <i class="fa-solid fa-magnifying-glass text-zinc-400 ml-4 mr-2"></i>
+                        <input 
+                            type="text" 
+                            name="q" 
+                            id="bannerSearchInput" 
+                            placeholder="{{ \App\Models\Setting::get('banner_search_placeholder', 'Search Office 365, YouTube, Spotify...') }}"
+                            autocomplete="off"
+                            class="w-full bg-transparent border-none outline-none text-sm text-zinc-800 dark:text-zinc-200 placeholder-zinc-400 font-sans"
+                        >
+                        <button
+                            type="submit"
+                            class="bg-brand-yellow hover:bg-brand-hover text-zinc-900 px-6 py-2.5 rounded-full font-semibold text-sm transition-all flex items-center gap-2 shrink-0">
+                            Search <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Banner Live Suggestions Dropdown Box -->
+                <div id="bannerSuggestionsBox" class="absolute left-0 right-0 top-full mt-2 bg-white dark:bg-brand-cardDark border border-cream-200 dark:border-brand-borderDark rounded-2xl shadow-2xl z-50 overflow-hidden hidden transition-all">
+                    <div class="p-3 border-b border-cream-100 dark:border-zinc-800 flex items-center justify-between text-[11px] font-bold text-zinc-400 uppercase tracking-wider">
+                        <span><i class="fa-solid fa-bolt text-brand-yellow mr-1"></i> Quick Suggestions</span>
+                        <span id="bannerSuggestionsCount" class="text-[10px] text-zinc-500"></span>
+                    </div>
+                    <div id="bannerSuggestionsList" class="divide-y divide-cream-100 dark:divide-zinc-800/80 max-h-80 overflow-y-auto">
+                        <!-- Populated via JS -->
+                    </div>
+                    <a id="bannerViewAllBtn" href="#" class="block p-3 text-center text-xs font-bold text-zinc-900 dark:text-brand-yellow bg-cream-50/80 dark:bg-zinc-900/80 hover:bg-cream-100 dark:hover:bg-zinc-800 transition-colors border-t border-cream-100 dark:border-zinc-800">
+                        View all results on search page <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </a>
                 </div>
             </div>
 
             @if($trustedText = \App\Models\Setting::get('banner_trusted_text', 'TRUSTED BY OVER 50,000+ CUSTOMERS BANGLADESH WIDE'))
-                <p class="mt-6 text-xs text-zinc-500 dark:text-zinc-500 font-medium tracking-wide" data-aos="fade-up">
+                <p class="mt-8 text-xs text-zinc-500 dark:text-zinc-500 font-bold uppercase tracking-wider" data-aos="fade-up">
                     {{ $trustedText }}
                 </p>
             @endif
+
+            <!-- Brand Subscription Partners / Faded Logos Showcase -->
+            <div class="mt-6 max-w-5xl mx-auto" data-aos="fade-up">
+                <div class="flex items-center justify-center flex-wrap gap-2.5 sm:gap-3.5 opacity-60 dark:opacity-50 hover:opacity-100 transition-opacity duration-300">
+                    <!-- YouTube Premium -->
+                    <a href="{{ route('search', ['q' => 'YouTube']) }}" class="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-brand-cardDark border border-cream-200 dark:border-brand-borderDark text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:border-brand-yellow hover:scale-105 transition-all duration-200 shadow-sm group">
+                        <i class="fa-brands fa-youtube text-red-600 text-base group-hover:scale-110 transition-transform"></i>
+                        <span class="text-xs font-bold tracking-tight">YouTube Premium</span>
+                    </a>
+
+                    <!-- Spotify -->
+                    <a href="{{ route('search', ['q' => 'Spotify']) }}" class="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-brand-cardDark border border-cream-200 dark:border-brand-borderDark text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:border-brand-yellow hover:scale-105 transition-all duration-200 shadow-sm group">
+                        <i class="fa-brands fa-spotify text-emerald-500 text-base group-hover:scale-110 transition-transform"></i>
+                        <span class="text-xs font-bold tracking-tight">Spotify</span>
+                    </a>
+
+                    <!-- Prime Video -->
+                    <a href="{{ route('search', ['q' => 'Prime']) }}" class="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-brand-cardDark border border-cream-200 dark:border-brand-borderDark text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:border-brand-yellow hover:scale-105 transition-all duration-200 shadow-sm group">
+                        <i class="fa-brands fa-amazon text-sky-500 text-base group-hover:scale-110 transition-transform"></i>
+                        <span class="text-xs font-bold tracking-tight">Prime Video</span>
+                    </a>
+
+                    <!-- Google Workspace -->
+                    <a href="{{ route('search', ['q' => 'Google']) }}" class="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-brand-cardDark border border-cream-200 dark:border-brand-borderDark text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:border-brand-yellow hover:scale-105 transition-all duration-200 shadow-sm group">
+                        <i class="fa-brands fa-google text-amber-500 text-base group-hover:scale-110 transition-transform"></i>
+                        <span class="text-xs font-bold tracking-tight">Google Workspace</span>
+                    </a>
+
+                    <!-- HBO Max -->
+                    <a href="{{ route('search', ['q' => 'HBO']) }}" class="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-brand-cardDark border border-cream-200 dark:border-brand-borderDark text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:border-brand-yellow hover:scale-105 transition-all duration-200 shadow-sm group">
+                        <span class="w-5 h-5 rounded bg-purple-600 text-white font-black text-[10px] flex items-center justify-center group-hover:scale-110 transition-transform">HBO</span>
+                        <span class="text-xs font-bold tracking-tight">HBO Max</span>
+                    </a>
+
+                    <!-- Microsoft 365 -->
+                    <a href="{{ route('search', ['q' => 'Microsoft']) }}" class="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-brand-cardDark border border-cream-200 dark:border-brand-borderDark text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:border-brand-yellow hover:scale-105 transition-all duration-200 shadow-sm group">
+                        <i class="fa-brands fa-microsoft text-blue-500 text-base group-hover:scale-110 transition-transform"></i>
+                        <span class="text-xs font-bold tracking-tight">Microsoft Office</span>
+                    </a>
+
+                    <!-- Udemy -->
+                    <a href="{{ route('search', ['q' => 'Udemy']) }}" class="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-brand-cardDark border border-cream-200 dark:border-brand-borderDark text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:border-brand-yellow hover:scale-105 transition-all duration-200 shadow-sm group">
+                        <span class="w-5 h-5 rounded bg-rose-600 text-white font-black text-[10px] flex items-center justify-center group-hover:scale-110 transition-transform">U</span>
+                        <span class="text-xs font-bold tracking-tight">Udemy</span>
+                    </a>
+
+                    <!-- Netflix -->
+                    <a href="{{ route('search', ['q' => 'Netflix']) }}" class="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-brand-cardDark border border-cream-200 dark:border-brand-borderDark text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:border-brand-yellow hover:scale-105 transition-all duration-200 shadow-sm group">
+                        <span class="w-5 h-5 rounded bg-red-600 text-white font-black text-[10px] flex items-center justify-center group-hover:scale-110 transition-transform">N</span>
+                        <span class="text-xs font-bold tracking-tight">Netflix 4K</span>
+                    </a>
+
+                    <!-- Canva Pro -->
+                    <a href="{{ route('search', ['q' => 'Canva']) }}" class="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-brand-cardDark border border-cream-200 dark:border-brand-borderDark text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:border-brand-yellow hover:scale-105 transition-all duration-200 shadow-sm group">
+                        <i class="fa-solid fa-wand-magic-sparkles text-teal-500 text-xs group-hover:scale-110 transition-transform"></i>
+                        <span class="text-xs font-bold tracking-tight">Canva Pro</span>
+                    </a>
+                </div>
+            </div>
         </div>
     </section>
     @endif
@@ -278,19 +360,21 @@
     @endif
 
     <!-- 8. CONTACT SECTION -->
+    @if(\App\Models\Setting::get('contact_status', '1') == '1')
     <section id="contact" class="py-20 border-t border-cream-200 dark:border-brand-borderDark">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-14" data-aos="fade-up">
-                <span class="text-xs font-extrabold text-amber-600 dark:text-brand-yellow uppercase tracking-wider">Get In
-                    Touch</span>
-                <h2 class="text-3xl font-extrabold text-zinc-900 dark:text-white mt-1">Contact Us</h2>
-                <p class="text-zinc-600 dark:text-zinc-400 mt-2 text-sm">Have a question or need a custom digital
-                    subscription? Reach out to us anytime.</p>
+                @if(\App\Models\Setting::get('contact_badge'))
+                <span class="text-xs font-extrabold text-amber-600 dark:text-brand-yellow uppercase tracking-wider block mb-1">{{ \App\Models\Setting::get('contact_badge', 'Get In Touch') }}</span>
+                @endif
+                <h2 class="text-3xl font-extrabold text-zinc-900 dark:text-white mt-1">{{ \App\Models\Setting::get('contact_title', 'Contact Us') }}</h2>
+                <p class="text-zinc-600 dark:text-zinc-400 mt-2 text-sm">{{ \App\Models\Setting::get('contact_description', 'Have a question or need a custom digital subscription? Reach out to us anytime.') }}</p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8" data-aos="fade-up">
                 <!-- Info Cards -->
                 <div class="space-y-4">
+                    <!-- Email Card -->
                     <div
                         class="bg-white dark:bg-brand-cardDark p-6 rounded-2xl border border-cream-200 dark:border-brand-borderDark flex items-start gap-4">
                         <div
@@ -298,14 +382,14 @@
                             <i class="fa-solid fa-envelope"></i>
                         </div>
                         <div>
-                            <h3 class="font-bold text-zinc-900 dark:text-white text-base">Email Us</h3>
-                            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Send us an email for general
-                                inquiries.</p>
-                            <a href="mailto:email@digigo.click"
-                                class="text-xs font-semibold text-amber-600 dark:text-brand-yellow mt-2 inline-block">email@digigo.click</a>
+                            <h3 class="font-bold text-zinc-900 dark:text-white text-base">{{ \App\Models\Setting::get('contact_email_title', 'Email Us') }}</h3>
+                            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">{{ \App\Models\Setting::get('contact_email_subtitle', 'Send us an email for general inquiries.') }}</p>
+                            <a href="mailto:{{ \App\Models\Setting::get('contact_email', 'email@digigo.click') }}"
+                                class="text-xs font-semibold text-amber-600 dark:text-brand-yellow mt-2 inline-block">{{ \App\Models\Setting::get('contact_email', 'email@digigo.click') }}</a>
                         </div>
                     </div>
 
+                    <!-- WhatsApp Card -->
                     <div
                         class="bg-white dark:bg-brand-cardDark p-6 rounded-2xl border border-cream-200 dark:border-brand-borderDark flex items-start gap-4">
                         <div
@@ -313,15 +397,14 @@
                             <i class="fa-brands fa-whatsapp"></i>
                         </div>
                         <div>
-                            <h3 class="font-bold text-zinc-900 dark:text-white text-base">WhatsApp Support</h3>
-                            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Fastest response for instant order
-                                help.</p>
-                            <a href="#"
-                                class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mt-2 inline-block">+880
-                                1700-000000</a>
+                            <h3 class="font-bold text-zinc-900 dark:text-white text-base">{{ \App\Models\Setting::get('contact_whatsapp_title', 'WhatsApp Support') }}</h3>
+                            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">{{ \App\Models\Setting::get('contact_whatsapp_subtitle', 'Fastest response for instant order help.') }}</p>
+                            <a href="{{ \App\Models\Setting::get('contact_whatsapp_url', '#') }}" target="_blank"
+                                class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mt-2 inline-block">{{ \App\Models\Setting::get('contact_whatsapp_number', '+880 1700-000000') }}</a>
                         </div>
                     </div>
 
+                    <!-- Location Card -->
                     <div
                         class="bg-white dark:bg-brand-cardDark p-6 rounded-2xl border border-cream-200 dark:border-brand-borderDark flex items-start gap-4">
                         <div
@@ -329,10 +412,10 @@
                             <i class="fa-solid fa-location-dot"></i>
                         </div>
                         <div>
-                            <h3 class="font-bold text-zinc-900 dark:text-white text-base">Office Location</h3>
-                            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Gulshan-1, Dhaka, Bangladesh.</p>
-                            <span class="text-xs font-semibold text-blue-600 dark:text-blue-400 mt-2 inline-block">Visit
-                                Support Desk</span>
+                            <h3 class="font-bold text-zinc-900 dark:text-white text-base">{{ \App\Models\Setting::get('contact_location_title', 'Office Location') }}</h3>
+                            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">{{ \App\Models\Setting::get('contact_location_address', 'Gulshan-1, Dhaka, Bangladesh.') }}</p>
+                            <a href="{{ \App\Models\Setting::get('contact_location_btn_link', '#') }}" target="_blank"
+                                class="text-xs font-semibold text-blue-600 dark:text-blue-400 mt-2 inline-block hover:underline">{{ \App\Models\Setting::get('contact_location_btn_text', 'Visit Support Desk') }}</a>
                         </div>
                     </div>
                 </div>
@@ -407,6 +490,7 @@
             </div>
         </div>
     </section>
+    @endif
 @endsection
 @push('js')
     <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
@@ -460,5 +544,112 @@
                     });
             });
         });
+
+        // Banner Search Live Suggestions
+        (function() {
+        const searchInput = document.getElementById('bannerSearchInput');
+        const suggestionsBox = document.getElementById('bannerSuggestionsBox');
+        const suggestionsList = document.getElementById('bannerSuggestionsList');
+        const suggestionsCount = document.getElementById('bannerSuggestionsCount');
+        const viewAllBtn = document.getElementById('bannerViewAllBtn');
+
+        let debounceTimer;
+
+        if (!searchInput || !suggestionsBox) return;
+
+        searchInput.addEventListener('input', function() {
+            const query = this.value.trim();
+
+            clearTimeout(debounceTimer);
+
+            if (query.length < 1) {
+                suggestionsBox.classList.add('hidden');
+                return;
+            }
+
+            debounceTimer = setTimeout(() => {
+                fetchSuggestions(query);
+            }, 250);
+        });
+
+        // Hide suggestions on outside click
+        document.addEventListener('click', function(e) {
+            if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
+                suggestionsBox.classList.add('hidden');
+            }
+        });
+
+        // Show suggestions if focus with existing query
+        searchInput.addEventListener('focus', function() {
+            if (this.value.trim().length >= 1 && suggestionsList.children.length > 0) {
+                suggestionsBox.classList.remove('hidden');
+            }
+        });
+
+        function fetchSuggestions(query) {
+            fetch(`{{ route('search.suggestions') }}?q=${encodeURIComponent(query)}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.results && data.results.length > 0) {
+                        suggestionsList.innerHTML = '';
+                        suggestionsCount.textContent = `${data.total} found`;
+                        viewAllBtn.href = `{{ route('search') }}?q=${encodeURIComponent(query)}`;
+
+                        data.results.forEach(product => {
+                            const item = document.createElement('a');
+                            item.href = product.url;
+                            item.className = 'flex items-center gap-3 p-3 hover:bg-cream-50 dark:hover:bg-zinc-800/80 transition-colors group text-left';
+
+                            const imageHtml = product.image 
+                                ? `<img src="${product.image}" alt="${product.name}" class="w-10 h-10 rounded-lg object-cover shrink-0 border border-cream-200 dark:border-zinc-700">`
+                                : `<div class="w-10 h-10 rounded-lg bg-cream-100 dark:bg-zinc-800 border border-cream-200 dark:border-zinc-700 flex items-center justify-center text-zinc-400 shrink-0 text-xs"><i class="fa-solid fa-cube"></i></div>`;
+
+                            const badgeHtml = product.badge
+                                ? `<span class="px-1.5 py-0.5 text-[9px] font-extrabold rounded bg-brand-yellow text-zinc-900 uppercase ml-1">${product.badge}</span>`
+                                : '';
+
+                            const categoryHtml = product.category
+                                ? `<span class="text-[10px] text-zinc-400 dark:text-zinc-500 block">${product.category}</span>`
+                                : '';
+
+                            const oldPriceHtml = product.old_price 
+                                ? `<span class="text-[10px] text-zinc-400 line-through mr-1">৳${product.old_price}</span>` 
+                                : '';
+
+                            item.innerHTML = `
+                                ${imageHtml}
+                                <div class="min-w-0 flex-1">
+                                    <div class="flex items-center gap-1">
+                                        <span class="font-bold text-xs text-zinc-900 dark:text-white truncate group-hover:text-amber-600 dark:group-hover:text-brand-yellow transition-colors">${product.name}</span>
+                                        ${badgeHtml}
+                                    </div>
+                                    ${categoryHtml}
+                                </div>
+                                <div class="text-right shrink-0">
+                                    ${oldPriceHtml}
+                                    <span class="text-xs font-black text-zinc-900 dark:text-white">৳${product.price}</span>
+                                </div>
+                            `;
+
+                            suggestionsList.appendChild(item);
+                        });
+
+                        suggestionsBox.classList.remove('hidden');
+                    } else {
+                        suggestionsList.innerHTML = `
+                            <div class="p-4 text-center text-xs text-zinc-400">
+                                No live suggestions for "${query}". Press Search to find all.
+                            </div>
+                        `;
+                        suggestionsCount.textContent = '0 found';
+                        viewAllBtn.href = `{{ route('search') }}?q=${encodeURIComponent(query)}`;
+                        suggestionsBox.classList.remove('hidden');
+                    }
+                })
+                .catch(err => {
+                    console.error('Error fetching banner search suggestions:', err);
+                });
+        }
+    })();
     </script>
 @endpush

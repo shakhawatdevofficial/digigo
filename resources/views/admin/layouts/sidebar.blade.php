@@ -74,6 +74,15 @@
                     <a href="{{ route('admin.faqs.index') }}" class="block px-3 py-1.5 text-[11px] rounded-lg {{ request()->routeIs('admin.faqs.*') ? 'text-amber-600 dark:text-brand-yellow font-bold bg-cream-100 dark:bg-zinc-800/60' : 'text-zinc-600 dark:text-zinc-400 hover:text-amber-600 dark:hover:text-brand-yellow hover:bg-cream-50 dark:hover:bg-zinc-800/30' }} transition-colors">
                         <i class="fa-solid fa-circle-question text-[9px] mr-1"></i> FAQ Questions
                     </a>
+                    <a href="{{ route('admin.customization.footer') }}" class="block px-3 py-1.5 text-[11px] rounded-lg {{ request()->routeIs('admin.customization.footer') ? 'text-amber-600 dark:text-brand-yellow font-bold bg-cream-100 dark:bg-zinc-800/60' : 'text-zinc-600 dark:text-zinc-400 hover:text-amber-600 dark:hover:text-brand-yellow hover:bg-cream-50 dark:hover:bg-zinc-800/30' }} transition-colors">
+                        <i class="fa-solid fa-shoe-prints text-[9px] mr-1"></i> Footer & Logo Branding
+                    </a>
+                    <a href="{{ route('admin.customization.contact') }}" class="block px-3 py-1.5 text-[11px] rounded-lg {{ request()->routeIs('admin.customization.contact') ? 'text-amber-600 dark:text-brand-yellow font-bold bg-cream-100 dark:bg-zinc-800/60' : 'text-zinc-600 dark:text-zinc-400 hover:text-amber-600 dark:hover:text-brand-yellow hover:bg-cream-50 dark:hover:bg-zinc-800/30' }} transition-colors">
+                        <i class="fa-solid fa-address-book text-[9px] mr-1"></i> Contact & Location Info
+                    </a>
+                    <a href="{{ route('admin.customization.seo') }}" class="block px-3 py-1.5 text-[11px] rounded-lg {{ request()->routeIs('admin.customization.seo') ? 'text-amber-600 dark:text-brand-yellow font-bold bg-cream-100 dark:bg-zinc-800/60' : 'text-zinc-600 dark:text-zinc-400 hover:text-amber-600 dark:hover:text-brand-yellow hover:bg-cream-50 dark:hover:bg-zinc-800/30' }} transition-colors">
+                        <i class="fa-solid fa-globe text-[9px] mr-1"></i> Logo, Favicon & SEO
+                    </a>
                 </div>
             </div>
 
@@ -131,17 +140,40 @@
                 </div>
             </div>
 
-            <!-- Single Link: User Accounts -->
+            <!-- Management: Users & Accounts -->
             <p class="px-3 text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider pt-3 mb-2">Management</p>
-            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-cream-50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-white transition-colors">
-                <i class="fa-solid fa-users w-4 text-zinc-400"></i>
-                <span>Customer Accounts</span>
-            </a>
+            <div class="admin-sidebar-dropdown">
+                <button type="button" class="admin-dropdown-toggle w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium {{ request()->routeIs('admin.users.*') ? 'text-zinc-900 dark:text-white font-bold bg-cream-50 dark:bg-zinc-800/60' : 'text-zinc-700 dark:text-zinc-300 hover:bg-cream-50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-white' }} transition-colors">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-users w-4 {{ request()->routeIs('admin.users.*') ? 'text-amber-600 dark:text-brand-yellow' : 'text-zinc-400' }}"></i>
+                        <span>User Management</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down text-[10px] text-zinc-400 transition-transform duration-200 admin-dropdown-arrow {{ request()->routeIs('admin.users.*') ? 'rotate-180' : '' }}"></i>
+                </button>
+                <div class="admin-dropdown-content {{ request()->routeIs('admin.users.*') ? '' : 'hidden' }} pl-9 pr-2 py-1 space-y-1">
+                    <a href="{{ route('admin.users.index') }}" class="block px-3 py-1.5 text-[11px] rounded-lg {{ request()->routeIs('admin.users.index') ? 'text-amber-600 dark:text-brand-yellow font-bold bg-cream-100 dark:bg-zinc-800/60' : 'text-zinc-600 dark:text-zinc-400 hover:text-amber-600 dark:hover:text-brand-yellow hover:bg-cream-50 dark:hover:bg-zinc-800/30' }} transition-colors">
+                        <i class="fa-solid fa-users-viewfinder text-[9px] mr-1"></i> All Users
+                    </a>
+                    <a href="{{ route('admin.users.create') }}" class="block px-3 py-1.5 text-[11px] rounded-lg {{ request()->routeIs('admin.users.create') ? 'text-amber-600 dark:text-brand-yellow font-bold bg-cream-100 dark:bg-zinc-800/60' : 'text-zinc-600 dark:text-zinc-400 hover:text-amber-600 dark:hover:text-brand-yellow hover:bg-cream-50 dark:hover:bg-zinc-800/30' }} transition-colors">
+                        <i class="fa-solid fa-user-plus text-[9px] mr-1"></i> Add New User
+                    </a>
+                </div>
+            </div>
 
             <!-- Single Link: Inquiries -->
-            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-cream-50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-white transition-colors">
-                <i class="fa-solid fa-envelope-open-text w-4 text-zinc-400"></i>
-                <span>Contact Inquiries</span>
+            @php
+                $unreadContactsCount = \App\Models\Contact::where('is_read', false)->count();
+            @endphp
+            <a href="{{ route('admin.contacts.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium {{ request()->routeIs('admin.contacts.*') ? 'text-zinc-900 dark:text-white font-bold bg-cream-50 dark:bg-zinc-800/60' : 'text-zinc-700 dark:text-zinc-300 hover:bg-cream-50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-white' }} transition-colors">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-envelope-open-text w-4 {{ request()->routeIs('admin.contacts.*') ? 'text-amber-600 dark:text-brand-yellow' : 'text-zinc-400' }}"></i>
+                    <span>Contact Inquiries</span>
+                </div>
+                @if($unreadContactsCount > 0)
+                    <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-rose-500 text-white animate-pulse">
+                        {{ $unreadContactsCount }}
+                    </span>
+                @endif
             </a>
 
             <!-- Dropdown 4: System Settings -->
