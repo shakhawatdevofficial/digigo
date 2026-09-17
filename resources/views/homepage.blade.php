@@ -521,13 +521,27 @@
                 <!-- Contact Form -->
                 <div
                     class="lg:col-span-2 bg-white dark:bg-brand-cardDark p-8 rounded-2xl border border-cream-200 dark:border-brand-borderDark shadow-sm">
+
+                    {{-- Success Message --}}
+                    @if (session('success'))
+                        <div class="flex items-center gap-3 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 p-4 rounded-xl mb-4 border border-green-200 dark:border-green-800"
+                            role="alert">
+                            <span
+                                class="flex items-center justify-center w-8 h-8 rounded-full bg-green-200 dark:bg-green-800 text-green-700 dark:text-green-300 shrink-0">
+                                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                            </span>
+                            <span class="text-sm font-medium">{{ session('success') }}</span>
+                        </div>
+                    @endif
+
                     <form action="{{ route('contact') }}" method="POST" class="space-y-4">
                         @csrf
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs font-bold text-zinc-700 dark:text-zinc-300 mb-2">Your
                                     Name</label>
-                                <input type="text" placeholder="John Doe" required name="name" value="{{ old('name') }}"
+                                <input type="text" placeholder="John Doe" required name="name"
+                                    value="{{ old('name') }}"
                                     class="w-full bg-cream-50 dark:bg-zinc-900 border border-cream-200 dark:border-brand-borderDark rounded-xl p-3 text-xs outline-none focus:border-brand-yellow font-sans">
                                 @error('name')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -536,7 +550,8 @@
                             <div>
                                 <label class="block text-xs font-bold text-zinc-700 dark:text-zinc-300 mb-2">Email
                                     Address</label>
-                                <input type="email" placeholder="example@mail.com" required name="email" value="{{ old('email') }}"
+                                <input type="email" placeholder="example@mail.com" required name="email"
+                                    value="{{ old('email') }}"
                                     class="w-full bg-cream-50 dark:bg-zinc-900 border border-cream-200 dark:border-brand-borderDark rounded-xl p-3 text-xs outline-none focus:border-brand-yellow font-sans">
                                 @error('email')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -546,7 +561,8 @@
 
                         <div>
                             <label class="block text-xs font-bold text-zinc-700 dark:text-zinc-300 mb-2">Subject</label>
-                            <input type="text" placeholder="Custom Order Inquiry" name="subject" value="{{ old('subject') }}"
+                            <input type="text" placeholder="Custom Order Inquiry" name="subject"
+                                value="{{ old('subject') }}"
                                 class="w-full bg-cream-50 dark:bg-zinc-900 border border-cream-200 dark:border-brand-borderDark rounded-xl p-3 text-xs outline-none focus:border-brand-yellow font-sans">
                             @error('subject')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -562,17 +578,68 @@
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
-
+                        <input type="hidden" name="recaptcha_token" id="recaptcha_token">
                         <button type="submit"
                             class="w-full sm:w-auto px-8 py-3 bg-brand-yellow hover:bg-brand-hover text-zinc-900 font-bold rounded-xl text-xs transition-colors">
                             Send Message <i class="fa-solid fa-paper-plane ml-2"></i>
                         </button>
-                        @if(session('success'))
-                            <p class="text-green-500 text-xs mt-2">{{ session('success') }}</p>
-                        @endif
                     </form>
                 </div>
             </div>
         </div>
     </section>
 @endsection
+@push('js')
+    <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const form = this;
+            const submitButton = form.querySelector('button[type="submit"]');
+            const tokenInput = document.getElementById('recaptcha_token');
+
+            submitButton.disabled = true;
+            submitButton.innerHTML = 'Sending...';
+
+            console.log('Site Key:', '{{ config('services.recaptcha.site_key') }}');
+
+            if (typeof grecaptcha === 'undefined') {
+                console.error('reCAPTCHA script did not load.');
+                alert('reCAPTCHA could not be loaded. Please refresh the page.');
+                submitButton.disabled = false;
+                submitButton.innerHTML =
+                    'Send Message <i class="fa-solid fa-paper-plane ml-2"></i>';
+                return;
+            }
+
+            grecaptcha.ready(function() {
+
+                grecaptcha.execute(
+                        '{{ config('services.recaptcha.site_key') }}', {
+                            action: 'contact_form'
+                        }
+                    )
+                    .then(function(token) {
+
+                        console.log('reCAPTCHA token received:', token);
+
+                        tokenInput.value = token;
+
+                        form.submit();
+                    })
+                    .catch(function(error) {
+
+                        console.error('reCAPTCHA execute error:', error);
+
+                        submitButton.disabled = false;
+                        submitButton.innerHTML =
+                            'Send Message <i class="fa-solid fa-paper-plane ml-2"></i>';
+
+                        alert('reCAPTCHA verification failed. Check browser console.');
+                    });
+            });
+        });
+    </script>
+@endpush
