@@ -77,6 +77,23 @@
             width: 24px !important;
             border-radius: 9999px !important;
         }
+
+        /* Smooth Floating Animations for Brand Badges */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-14px) rotate(1.5deg); }
+        }
+        @keyframes floatMedium {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(-2deg); }
+        }
+        @keyframes floatFast {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-16px) rotate(2deg); }
+        }
+        .animate-float-1 { animation: floatSlow 5.5s ease-in-out infinite; }
+        .animate-float-2 { animation: floatMedium 6.8s ease-in-out infinite 0.8s; }
+        .animate-float-3 { animation: floatFast 5.2s ease-in-out infinite 1.5s; }
     </style>
     @stack('css')
 </head>
